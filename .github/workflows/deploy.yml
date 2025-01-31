@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sh ~/.bashrc
+            source ~/.nvm/nvm.sh
             cd ${{ secrets.FOLDER }};
             git checkout master;
             git pull;
