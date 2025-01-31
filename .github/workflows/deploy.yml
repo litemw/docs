@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-linters:
-    name: Deploy package
+  deploy:
+    name: Deploy site
     runs-on: ubuntu-latest
     permissions:
       contents: read
