@@ -1,0 +1,28 @@
+name: deploy
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+
+jobs:
+  run-linters:
+    name: Deploy package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Remote deploy
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ${{ secrets.FOLDER }};
+            git checkout master;
+            git pull;
+            nvm use;
+            bun i;
+            bun docs:build;
