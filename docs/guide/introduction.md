@@ -1,10 +1,9 @@
 ---
 outline: deep
-title: OpenAPI
+title: Введение
 ---
 
-# OpenAPI модуль
+# Introduction
 
 > [!Warning]
 > Work in progress
-

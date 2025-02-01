@@ -3,7 +3,7 @@ outline: deep
 title: Обработчики
 ---
 
-# Стандартные обработчики
+# Standard middlewares
 
 > [!Warning]
 > Work in progress

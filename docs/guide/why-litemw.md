@@ -1,10 +1,9 @@
 ---
 outline: deep
-title: OpenAPI
+title: Почему LiteMW
 ---
 
-# OpenAPI модуль
+# Why LiteMW
 
 > [!Warning]
 > Work in progress
-

@@ -3,4 +3,7 @@ outline: deep
 title: Начало работы
 ---
 
-# Обзор
+# Подготовка
+> [!Warning]
+> Work in progress
+

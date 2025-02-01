@@ -1,10 +1,8 @@
 ---
 outline: deep
-title: OpenAPI
 ---
 
-# OpenAPI модуль
+# Router
 
 > [!Warning]
 > Work in progress
-

@@ -9,13 +9,13 @@ hero:
   actions:
     - theme: brand
       text: Start
-      link: ./guide
+      link: /guide/introduction
     - theme: alt
       text: API
-      link: ./api
+      link: /api
     - theme: alt
       text: Examples
-      link: ./examples
+      link: /examples
   image:
     src: /litemw3d.png
     alt: LiteMW    

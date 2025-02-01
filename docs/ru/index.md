@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: Начать
-      link: ru/guide/getting-started
+      link: ru/guide/introduction
     - theme: alt
       text: API
       link: ru/api

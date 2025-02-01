@@ -3,7 +3,7 @@ outline: deep
 title: OpenAPI
 ---
 
-# OpenAPI модуль
+# OpenAPI module
 
 > [!Warning]
 > Work in progress

@@ -4,25 +4,43 @@ import {defineConfig} from 'vitepress'
 export default defineConfig({
   title: "LiteMW documentation",
   description: "LiteMW documentation site",
+  head: [
+    ['link', {rel: 'icon', href: '/favicon.ico'}]
+  ],
+
   themeConfig: {
     siteTitle: "Documentation",
     logo: {src: "/litemw.png", alt: "LiteMW"},
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      {text: 'Guide', link: './guide'},
-      {text: 'API', link: './api'},
-      {text: 'Examples', link: './examples'}
+      {text: 'Guide', link: '/guide/introduction'},
+      {text: 'API', link: '/api'},
+      {text: 'Examples', link: '/examples'}
     ],
 
-    sidebar: [
-      {
-        text: 'Examples',
+    sidebar: {
+      '/guide/': {
+        base: '/guide/',
         items: [
-          {text: 'Markdown Examples', link: '/markdown-examples'},
-          {text: 'Runtime API Examples', link: '/api-examples'}
+          {
+            text: 'Getting started',
+            items: [
+              {text: 'Introduction', link: 'introduction'},
+              {text: 'Why LiteMW', link: 'why-litemw'},
+              {text: 'Installation', link: 'start'}
+            ]
+          },
+          {
+            text: 'Modules',
+            items: [
+              {text: 'Router', link: 'router'},
+              {text: 'Middlewares', link: 'middlewares'},
+              {text: 'OpenAPI', link: 'openapi'},
+            ]
+          },
         ]
       }
-    ],
+    },
 
     socialLinks: [
       {icon: 'github', link: 'https://github.com/litemw'}
@@ -32,6 +50,7 @@ export default defineConfig({
       provider: 'local'
     }
   },
+
   locales: {
     root: {
       label: 'English',
@@ -40,7 +59,7 @@ export default defineConfig({
     ru: {
       label: 'Русский',
       lang: 'ru',
-      link: '/ru/index',
+      link: '/ru',
       title: "LiteMW документация",
       description: "LiteMW документация",
 
@@ -49,7 +68,7 @@ export default defineConfig({
         logo: {src: "/litemw.png", alt: "LiteMW"},
         // https://vitepress.dev/reference/default-theme-config
         nav: [
-          {text: 'Справочник', link: 'ru/guide/getting-started'},
+          {text: 'Справочник', link: 'ru/guide/introduction'},
           {text: 'API', link: 'ru/api'},
           {text: 'Примеры', link: 'ru/examples'}
         ],
@@ -58,7 +77,14 @@ export default defineConfig({
           '/ru/guide/': {
             base: '/ru/guide/',
             items: [
-              {text: 'Начало работы', link: 'getting-started'},
+              {
+                text: 'Начало работы',
+                items: [
+                  {text: 'Введение', link: 'introduction'},
+                  {text: 'Почему LiteMW', link: 'why-litemw'},
+                  {text: 'Подготовка', link: 'start'}
+                ]
+              },
               {
                 text: 'Модули',
                 items: [
