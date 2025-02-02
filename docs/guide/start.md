@@ -1,6 +1,6 @@
 ---
 outline: deep
-title: Начало работы
+title: Getting started
 ---
 
 # Getting started

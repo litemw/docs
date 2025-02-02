@@ -1,6 +1,6 @@
 ---
 outline: deep
-title: Обработчики
+title: Middlewares
 ---
 
 # Standard middlewares

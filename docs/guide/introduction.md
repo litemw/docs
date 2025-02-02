@@ -1,6 +1,6 @@
 ---
 outline: deep
-title: Введение
+title: Introduction
 ---
 
 # Introduction

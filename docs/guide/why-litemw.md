@@ -1,6 +1,6 @@
 ---
 outline: deep
-title: Почему LiteMW
+title: Why LiteMW
 ---
 
 # Why LiteMW
