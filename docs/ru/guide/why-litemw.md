@@ -28,20 +28,22 @@ type Middleware<State, Return> =
 Наш мидлвейр параметризован типом состояния, что позволяет в процессе понять какие объекты существуют в контексте,
 а также возвращает параметризованный тип, который будет использован для дальнейшего наполнения контекста.
 
-Основной сущностью LiteMW является [роутер](router) и обработчики запросов (хэндлеры), которые он создаёт при
+Основной сущностью
+<span class="text-brand-1">LiteMW</span>
+является [роутер](router) и обработчики запросов (хэндлеры), которые он создаёт при
 определении маршрута, рассмотрим пример простейшего приложения:
+
+### {#simple-app}
 ```ts
 import { createRouter } from '@litemw/router';
 import Koa from 'koa';
 
 const router = createRouter('/api');
 
-router
-  .get('/endpoint')
-  .use((ctx) => {
+router.get('/endpoint', (ctx) => {
     console.log(`Get request handled`);
     ctx.body = 'response'
-  })
+})
 
 const app = new Koa();
 app.use(router.routes());
@@ -53,14 +55,12 @@ app.listen(3000)
 
 Рассмотрим более сложный пример:
 ```ts {12,19,23}
-const router =
-  createRouter('/api')
+const router = createRouter('/api')
     .use((ctx) => {
       return {someDataFromRouter: 3000}
     })
 
-router
-  .get('/endpoint')
+router.get('/endpoint')
   .use((ctx) => {
     console.log(
       "Check data from router",
