@@ -82,7 +82,7 @@ export default defineConfig({
                 items: [
                   {text: 'Введение', link: 'introduction'},
                   {text: 'Почему LiteMW', link: 'why-litemw'},
-                  {text: 'Подготовка', link: 'start'}
+                  {text: 'Установка', link: 'start'}
                 ]
               },
               {
