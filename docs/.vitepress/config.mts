@@ -68,7 +68,7 @@ export default defineConfig({
         logo: {src: "/litemw.png", alt: "LiteMW"},
         // https://vitepress.dev/reference/default-theme-config
         nav: [
-          {text: 'Справочник', link: 'ru/guide/introduction'},
+          {text: 'Руководство', link: 'ru/guide/introduction'},
           {text: 'API', link: 'ru/api'},
           {text: 'Примеры', link: 'ru/examples'}
         ],
@@ -86,13 +86,23 @@ export default defineConfig({
                 ]
               },
               {
-                text: 'Модули',
+                text: 'Основы',
                 items: [
-                  {text: 'Роутер', link: 'router'},
-                  {text: 'Обработчики', link: 'middlewares'},
-                  {text: 'OpenAPI', link: 'openapi'},
+                  {text: 'Создание приложения', link: 'first-app'},
+                  {text: 'Использование мидлвейров', link: 'middlewares-use'},
+                  {text: 'OpenAPI', link: 'openapi-use'},
                 ]
               },
+              {
+                text: 'Сборка и запуск',
+                items: [
+                  {text: 'Tsc', link: 'tsc'},
+                  {text: 'Bun', link: 'bun'},
+                  {text: 'Esbuild', link: 'esbuild'},
+                  {text: 'Rollup', link: 'rollup'},
+                  {text: 'Webpack', link: 'webpack'},
+                ]
+              }
             ]
           }
         },
