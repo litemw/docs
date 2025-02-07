@@ -167,5 +167,189 @@ export function someMw(): Middleware<{...}, {...}> {
 
 ## Пайпы (pipes)
 
-> [!Warning]
-> Work in progress
+Пайпы представляют собой удобную абстракцию для построения конвейров по работе 
+с данными. Это параметризовання функция, к которой можно добавить другой пайп
+совместимый по типу. Примерная сигнатура пайпа:
+```ts
+type Pipe<I = unknown, O = unknown> = {
+  (value: I): O;
+  pipe<T>(pipe: PipeOrFunction<O, T>): Pipe<I, T>;
+  flatPipe<T>(pipe: PipeOrFunction<Awaited<O>, T>): Pipe<I, Promise<T>>;
+  metadata: any
+}
+```
+
+Мы можем видеть сигнатуру вызова: пайп при вызове на типе *I* возвращает некоторый тип *O*.
+Метод **pipe** позволяет присоединить к пайпу другой пайп или обычную функцию, 
+принимающие возвращаемый тип исходногой пайпа и возвращающий новый тип.
+Метод **flatPipe** сделан для более удобной работы с асинхронными данными:
+присоединяемый пайп получает "распакованный" промис. Также пайп явно содержит поле с **метаданными**.
+
+Рассмотрим пример работы пайпов:
+```ts
+const toStringPipe = pipe(
+  (s: any) => Promise.resolve(String(s))
+)  // асинхронный пайп (возвращает промис)
+
+const somePipe = pipe((s: string) => s.trim())   // кастомный калбэк
+  .pipe(parseInt)             // передача стандартной функции - парсим число 
+  .pipe((n) => n * 10)        // умножаем на 10
+  .pipe(toStringPipe)         // передача пайпа - асинхронно переводим в строку
+  .flatPipe((s) => s.length); // берём длину
+
+(await somePipe('  1234  ')) // === 5
+```
+
+### Прмер валидации с помощью pipe
+
+Параметризация пайпов позволяет нам использовать их в вышеописанных мидлвейрах для преобразования
+и валидации данных.
+
+Рассмотрим пример валидации query параметров с помощью пайпов.
+
+```ts
+const validateString = pipe((data: any) => {
+  if (typeof data === 'string') {
+    return data
+  } else {
+    throw new Error('Must be string')
+  }
+})
+
+const router = createRouter('/api')
+router
+  .post('/endpoint')
+  .use(useQuery('queryKey', validateString))
+  .use((ctx) => {
+    ctx.state.queryKey // string
+  });
+```
+
+В данном примере validateString пайп проверяет тип передаваомого объекта и возвращает всегда **string**,
+так как в противном случае он выбрасывает ошибкe. Эту ошибку потребуется 
+обработать либо вернуть пользователю в другом мидлвейре - 
+такой подход имеет ряд недостатков, поэтому альтернативой может быть явный возврат
+объекта ошибки, в таком случае тип объекта будет **string | Error**.
+
+На этом примере заметно преимущество использования пайпов: помимо выполнения своей логики
+их параметры типов могут быть использованы, чтобы вывести тип объекта в контексте
+(напомним что без данного пайпа тип *queryKey* был **string | string[] | undefined**.
+
+
+## Стандартные пайпы
+
+В LiteMW существует ряд пайпов для решения частых задач, среди них:
+парсинг данных, валидация, и выброс исключения при получении ошибки. Рассмотрим их:
+
+### Парсинг
+
+```ts
+function parseIntPipe(radix = 10): Pipe<unknown, number | ParseError>
+
+function parseFloatPipe() : Pipe<unknown, number | ParseError>
+
+function parseBoolPipe(): Pipe<unknown, boolean | ParseError> 
+
+function defaultValuePipe<D, T = D>(defaultVal: D): Pipe<T | null | undefined, T | D | ParseError>
+
+function parseEnumPipe<E>(en: E): Pipe<unknown, E | ParseError>
+
+function parseJSONPipe<T = any>(): Pipe<unknown, T | ParseError>
+```
+
+Все пайпы для парсинга возвращают некоторый тип (иногда параметрический) либо ошибку, сделано это для
+более гибкой обработки ошибок, так как данную ошибку можно проверить как явно, так и бросить её в 
+качестве исключения.
+
+### Исключения
+```ts
+function throwPipe<...>(): Pipe<Input, Exclude<Input, ErrorType>> 
+```
+
+Опустив параметры типа мы можем видеть что *throwPipe* возвращает пайп, который
+принимает некоторый тип-сумму а возвращает этот тип без типа ошибок.
+Внутри осуществляет проверку значения и выбрасывает ошибку, если приходи значение ошибки.
+
+Рассмотрим усовершенствованный пример из предыдущего шага:
+
+```ts
+const validateString = pipe((data: any) => {
+  if (typeof data === 'string') {
+    return data
+  } else {
+    return new Error('Must be string')
+  }
+}) // Pipe<any, string | Error>
+
+const router = createRouter('/api')
+router
+  .post('/endpoint')
+  .use(useQuery(
+    'queryKey', 
+    validateString.pipe(throwPipe)
+  ))
+  .use((ctx) => {
+    ctx.state.queryKey // string
+  });
+```
+
+Теперь не смотря на то что пайп validateString возвращает тип-сумму строки и ошибки,
+*throwPipe* обрабатывает этот тип и выбрасывает исключение с этой ошибкой.
+
+### Валидация
+
+Для валидации существует пайп *validatePipe*,
+
+```ts
+export function validatePipe<C>(
+  schema: z.Schema<C>
+): Pipe<any, Promise<C | z.ZodError>>;
+
+export function validatePipe<C extends object>(
+  schema: ClassSchema<C>
+): Pipe<any, Promise<C | ClassValidatorError>>;
+```
+
+Он принимает схемы библиотеки
+[**zod**](https://zod.dev/?id=ecosystem)
+и схемы
+[**class-validator**](https://github.com/typestack/class-validator).
+На основе этих схем также выводится возвращаемый тип.
+
+Рассмотрим пример их использования:
+```ts
+export class BodySchemaClass {
+  @IsString()
+  name: string;
+  @IsNumber()
+  age: number;
+  @IsBoolean()
+  status: boolean;
+}
+
+export const bodySchema = z.object({
+  name: z.string(),
+  age: z.number(),
+  status: z.boolean(),
+});
+
+const router = createRouter('/api')
+
+router
+  .get('/endpoint-zod')
+  .use(
+    useBody(validatePipe(bodySchema).pipe(throwPipe))
+  )
+  .use((ctx) => {
+    ctx.body // {name: string, age: number, status: boolean}
+  });
+
+router
+  .post('/endpoint-class-validator')
+  .use(
+    useBody(validatePipe(BodySchemaClass).pipe(throwPipe))
+  )
+  .use((ctx) => {
+    ctx.body // {name: string, age: number, status: boolean}
+  });
+```
