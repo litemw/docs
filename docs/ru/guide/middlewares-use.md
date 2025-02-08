@@ -389,9 +389,8 @@ const router = createRouter('/api')
 
 router
   .get('/endpoint')
-  .use(
-    useBody(validatePipe(bodySchema))
-  ).use((ctx, next) => {
+  .use(useBody(validatePipe(bodySchema)))
+  .use((ctx, next) => {
     if (ctx.body instanceof Error) {
       context.status = err.status ?? 500;
       context.body = 'Internal server Error';
