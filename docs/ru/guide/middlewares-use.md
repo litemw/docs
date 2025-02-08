@@ -394,10 +394,10 @@ router
     if (ctx.body instanceof Error) {
       context.status = err.status ?? 500;
       context.body = 'Internal server Error';
-    } else {
-      return next()
-    }
-  })...
+      next.cancel()
+    } 
+  })
+  .use(ctx => {...})
 ```
 ```ts [throwing.ts]
 const router = createRouter('/api')

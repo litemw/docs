@@ -207,3 +207,48 @@ router.get('/endpoint', (ctx) => {
   ctx.someNumber // string
 })
 ``` 
+
+## Завершение обработки 
+
+В некоторых случаях может возникнуть потребность в прерывании цепочки обработки запроса.
+Сделать это можно с помощью вызова метода **cancel()** у объекта *next*.
+
+Рассмотрим пример:
+
+```ts
+const router = createRouter('/api')
+  .use(async (ctx, next) => {
+    console.log('First middleware')
+    await next()
+    console.log('After first middleware')
+  })
+  .use((ctx, next) => {
+    console.log("Interrupted")
+    ctx.body = "Interrupted"
+    next.cancel()
+  })
+  .use(ctx => {
+    ... // do some work
+  });
+
+router.get('/endpoint', (ctx) => {
+  ...
+})
+```
+
+При обращении по адресу */api/endpoint*
+будет возвращена строка **'Interrupted'**, то есть после вызова *next.cancel()*
+последующие мидлвейры выполнены **не будут**, а управление вернётся 
+к предыдущим мидлвейрам где был вызван next.
+
+В консоли будет выведено:
+> First midddleware
+> 
+> Interrupted
+> 
+> After first middleware
+
+Данный механизм может быть полезен, когда требуется прервать обработку запроса, 
+но при этом выполнить предудущие мидлвейры в цепочке. 
+Альтернатива этому - выброс исключения, которое потребует блока 
+try/catch в одном из предыдущих мидлвейров. 
