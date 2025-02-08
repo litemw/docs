@@ -303,7 +303,7 @@ router
   });
 ```
 
-Теперь не смотря на то что пайп validateString возвращает тип-сумму строки и ошибки,
+Теперь несмотря на то, что пайп validateString возвращает тип-сумму строки и ошибки,
 *throwPipe* обрабатывает этот тип и выбрасывает исключение с этой ошибкой.
 
 #### Валидация
@@ -381,8 +381,26 @@ router
 обработать ошибку в следующим мидлвейре и например вернуть ответ пользователю.
 - Бросить исключение (например с помощью *throwPipe*), в таком случае это исключение потребуется отловить.
 
-Для второго сценария рассмотрим пример обработки исключений:
-```ts
+Рассмотрим примеры обработки ошибок для этих сценариев:
+
+::: code-group
+```ts [manual-processing.ts]
+const router = createRouter('/api')
+
+router
+  .get('/endpoint')
+  .use(
+    useBody(validatePipe(bodySchema))
+  ).use((ctx, next) => {
+    if (ctx.body instanceof Error) {
+      context.status = err.status ?? 500;
+      context.body = 'Internal server Error';
+    } else {
+      return next()
+    }
+  })...
+```
+```ts [throwing.ts]
 const router = createRouter('/api')
   .use(async (ctx, next) => {
     try {
@@ -399,6 +417,7 @@ router
     useBody(validatePipe(bodySchema).pipe(throwPipe))
   )...
 ```
+:::
 
 Для обработки исключений мы регистрируем мидлвейр (он может быть и в главном роутере),
 который вызывает следующий мидлвейр *next()*, обёрнутый в конструкцию
