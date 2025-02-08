@@ -40,7 +40,6 @@ type Middleware<State, Return> =
 является роутер и обработчики запросов (хэндлеры), которые он создаёт при
 определении маршрута, рассмотрим пример простейшего приложения:
 
-### {#simple-app}
 ```ts
 import { createRouter } from '@litemw/router';
 import Koa from 'koa';
