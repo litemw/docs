@@ -29,7 +29,7 @@ bun i koa @litemw/router
 :::
 
 > [!TIP]
-> Опционально вы можете использовать и [**koa-router**](https://www.npmjs.com/package/koa-router), 
+> Опционально вы можете использовать и [**@koa/router**](https://www.npmjs.com/package/@koa/router), 
 > **@litemw/router** использует его внутри и делегирует все его методы.
 
 ## Мидлвейры

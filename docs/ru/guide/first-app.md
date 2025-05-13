@@ -57,7 +57,7 @@ interface IRouterOptions {
 }
 ```
 
-Также роутер имплементирует интерфейс *IBaseRouter* из библиотеки koa-router 
+Также роутер имплементирует интерфейс *IBaseRouter* из библиотеки @koa/router 
 и в поле *koaRouter* содержит базовый роутер 
 ```ts
 const router = createRouter()...  // satisfies IBaseRouter
