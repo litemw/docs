@@ -33,9 +33,9 @@ export default defineConfig({
           {
             text: 'Modules',
             items: [
-              {text: 'Router', link: 'router'},
-              {text: 'Middlewares', link: 'middlewares'},
-              {text: 'OpenAPI', link: 'openapi'},
+              {text: 'First app', link: 'first-app'},
+              {text: 'Middlewares usage', link: 'middlewares-use'},
+              {text: 'OpenAPI', link: 'openapi-use'},
             ]
           },
         ]
