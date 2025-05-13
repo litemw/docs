@@ -96,11 +96,7 @@ export default defineConfig({
               {
                 text: 'Сборка и запуск',
                 items: [
-                  {text: 'Tsc', link: 'tsc'},
-                  {text: 'Bun', link: 'bun'},
-                  {text: 'Esbuild', link: 'esbuild'},
-                  {text: 'Rollup', link: 'rollup'},
-                  {text: 'Webpack', link: 'webpack'},
+                  {text: 'Способы', link: 'run-methods'},
                 ]
               }
             ]

@@ -3,7 +3,7 @@ outline: deep
 title: Роутер
 ---
 
-# Роутер
+# Сборка и запуск приложения
 
 > [!Warning]
 > Work in progress
